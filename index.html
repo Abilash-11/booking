@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Coffee Booking</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.box{
+
+width:350px;
+background:white;
+padding:25px;
+margin:auto;
+margin-top:100px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+
+}
+
+input,select,button{
+
+width:100%;
+padding:10px;
+margin:10px 0;
+
+}
+
+button{
+
+background:black;
+color:white;
+border:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>☕ Coffee Slot Booking</h2>
+
+<input id="name" placeholder="Name">
+
+<input id="phone" placeholder="Phone Number">
+
+<select id="slot">
+
+<option>10AM - 11AM</option>
+<option>11AM - 12PM</option>
+<option>12PM - 1PM</option>
+<option>1PM - 2PM</option>
+
+</select>
+
+<button onclick="book()">Book & Pay</button>
+
+</div>
+
+<script>
+
+function book(){
+
+var name=document.getElementById("name").value
+var phone=document.getElementById("phone").value
+var slot=document.getElementById("slot").value
+
+var payment="PAY"+Math.floor(Math.random()*100000)
+
+fetch("https://script.google.com/macros/s/AKfycbyirre0g3n_uyjNZfwWkjuAb2hthIWj0B56C9W0nVgIVuJopihVf02Gss-ift6Gtzmm/exec",{
+
+method:"POST",
+
+body:JSON.stringify({
+
+name:name,
+phone:phone,
+slot:slot,
+payment:payment
+
+})
+
+})
+
+.then(res=>res.text())
+
+.then(data=>{
+
+var message="Coffee Booking Confirmed %0AName:"+name+"%0ASlot:"+slot
+
+window.open("upi://pay?pa=abinith1415@oksbi&pn=CoffeeShop&am=1&cu=INR")
+
+window.open("https://wa.me/"+phone+"?text="+message)
+
+window.open("https://wa.me/919500297336?text="+message)
+
+alert("Booking Recorded")
+
+})
+
+}
+
+</script>
+
+</body>
+
+</html>
