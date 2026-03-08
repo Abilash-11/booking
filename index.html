@@ -5,6 +5,8 @@
 
 <title>Coffee Booking</title>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <style>
 
 body{
@@ -14,7 +16,6 @@ text-align:center;
 }
 
 .box{
-
 width:350px;
 background:white;
 padding:25px;
@@ -22,23 +23,19 @@ margin:auto;
 margin-top:100px;
 border-radius:10px;
 box-shadow:0 0 10px rgba(0,0,0,0.2);
-
 }
 
 input,select,button{
-
 width:100%;
 padding:10px;
 margin:10px 0;
-
 }
 
 button{
-
 background:black;
 color:white;
 border:none;
-
+cursor:pointer;
 }
 
 </style>
@@ -64,21 +61,35 @@ border:none;
 
 </select>
 
-<button onclick="book()">Book & Pay</button>
+<button onclick="pay()">Pay ₹9 & Book</button>
 
 </div>
 
 <script>
 
-function book(){
+function pay(){
 
 var name=document.getElementById("name").value
 var phone=document.getElementById("phone").value
 var slot=document.getElementById("slot").value
 
-var payment="PAY"+Math.floor(Math.random()*100000)
+var options = {
 
-fetch("https://script.google.com/macros/s/AKfycbyirre0g3n_uyjNZfwWkjuAb2hthIWj0B56C9W0nVgIVuJopihVf02Gss-ift6Gtzmm/exec",{
+"key": "RAZORPAY_KEY_ID",
+
+"amount": 900,
+
+"currency": "INR",
+
+"name": "Coffee Shop",
+
+"description": "Coffee Slot Booking",
+
+handler: function (response){
+
+var payment=response.razorpay_payment_id
+
+fetch("YOUR_SCRIPT_URL",{
 
 method:"POST",
 
@@ -97,17 +108,23 @@ payment:payment
 
 .then(data=>{
 
-var message="Coffee Booking Confirmed %0AName:"+name+"%0ASlot:"+slot
+var msg="☕ Coffee Booking Confirmed %0AName:"+name+"%0ASlot:"+slot
 
-window.open("upi://pay?pa=abinith1415@oksbi&pn=CoffeeShop&am=1&cu=INR")
+window.open("https://wa.me/"+phone+"?text="+msg)
 
-window.open("https://wa.me/"+phone+"?text="+message)
+window.open("https://wa.me/919500297336?text="+msg)
 
-window.open("https://wa.me/919500297336?text="+message)
-
-alert("Booking Recorded")
+alert("Booking Confirmed")
 
 })
+
+}
+
+};
+
+var rzp=new Razorpay(options)
+
+rzp.open()
 
 }
 
